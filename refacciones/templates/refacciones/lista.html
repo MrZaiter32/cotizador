@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Lista de Refacciones</h2>
+
+    <!-- Barra de búsqueda -->
+    <form method="GET" action="{% url 'buscar_refacciones' %}" class="mb-4">
+        <input type="text" name="q" class="form-control" placeholder="Buscar refacciones..." value="{{ request.GET.q }}">
+    </form>
+
+    <!-- Tabla de refacciones -->
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>Descripción</th>
+                <th>Familia</th>
+                <th>Marca</th>
+                <th>Número de Parte</th>
+                <th>Fotografía</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for refaccion in refacciones %}
+            <tr>
+                <td>{{ refaccion.id }}</td>
+                <td>{{ refaccion.sku }}</td>
+                <td>{{ refaccion.descripcion }}</td>
+                <td>{{ refaccion.familia.nombre }}</td>
+                <td>{{ refaccion.marca }}</td>
+                <td>{{ refaccion.numero_parte }}</td>
+                <td>
+                    {% if refaccion.fotografia %}
+                        <img src="{{ refaccion.fotografia.url }}" alt="Foto" style="max-width: 50px; max-height: 50px;">
+                    {% else %}
+                        Sin imagen
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Botón Editar -->
+                    <a href="{% url 'editar_refaccion' refaccion.id %}" class="btn btn-warning btn-sm">Editar</a>
+
+                    <!-- Botón Eliminar -->
+                    <form method="POST" action="{% url 'eliminar_refaccion' refaccion.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta refacción?');">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Botón Crear Refacción -->
+    <a href="{% url 'crear_refaccion' %}" class="btn btn-primary mt-3">Crear Nueva Refacción</a>
+</div>
+{% endblock %}

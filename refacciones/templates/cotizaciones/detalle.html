@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Detalle Cotización{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Detalle de Cotización</h2>
+<p><strong>Cliente:</strong> {{ cotizacion.cliente.nombre }}</p>
+<p><strong>Fecha:</strong> {{ cotizacion.fecha }}</p>
+<p><strong>Total:</strong> ${{ cotizacion.total|floatformat:2 }}</p>
+
+<h3>Productos</h3>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>SKU</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cotizacion.items.all %}
+        <tr>
+            <td>{{ item.refaccion.sku }}</td>
+            <td>{{ item.refaccion.descripcion }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>${{ item.precio_unitario|floatformat:2 }}</td>
+            <td>${{ item.subtotal|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'listar_cotizaciones' %}" class="btn btn-secondary mt-3">Volver</a>
+{% endblock %}

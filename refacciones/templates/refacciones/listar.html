@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Lista de Refacciones{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Refacciones</h2>
+
+<form method="get" action="{% url 'buscar_refacciones' %}" class="mb-3">
+    <input type="text" name="q" placeholder="Buscar..." class="form-control">
+</form>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>SKU</th>
+            <th>Descripción</th>
+            <th>Familia</th>
+            <th>Marca</th>
+            <th>Foto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for refaccion in refacciones %}
+        <tr>
+            <td>{{ refaccion.id }}</td>
+            <td>{{ refaccion.sku }}</td>
+            <td>{{ refaccion.descripcion }}</td>
+            <td>{{ refaccion.familia.nombre }}</td>
+            <td>{{ refaccion.marca }}</td>
+            <td>
+                {% if refaccion.fotografia %}
+                    <img src="{{ refaccion.fotografia.url }}" alt="Foto" style="max-width: 80px;">
+                {% else %}
+                    No disponible
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'editar_refaccion' refaccion.id %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'eliminar_refaccion' refaccion.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
